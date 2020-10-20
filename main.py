@@ -11,11 +11,27 @@ database with SQL, and then make some exploratory analysis
 """
 
 # import packages
+import os
 from google.cloud import bigquery
+
+# set current work directory to the one with this script.
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# import functions from auxiliary files
+from errors_aux import custom_error
+
 
 # initialize client object using the bigquery key I generated from Google clouds
 google_credentials_path = 'bigquery-stackoverflow-DC-fdb49371cf87.json'
-client = bigquery.Client.from_service_account_json(google_credentials_path)
+if os.path.exists(google_credentials_path):
+    client = bigquery.Client.from_service_account_json(google_credentials_path)
+else:
+    error_no_credentials = "File bigquery-stackoverflow-DC-fdb49371cf87.json " + \
+                            "with google credentials not in working directory. "+ \
+                            "Move it here if you have it, or ask Davide for " + \
+                            "one if you don't."
+    raise custom_error(error_no_credentials)
+
 
 # create simple query
 query_job = client.query(

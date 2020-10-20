@@ -1,2 +1,6 @@
 
 bigquery-stackoverflow-DC-fdb49371cf87.json
+
+__pycache__/
+
+.DS_Store
