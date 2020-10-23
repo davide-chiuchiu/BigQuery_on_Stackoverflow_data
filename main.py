@@ -45,20 +45,16 @@ stackoverflow_dataset_id = 'bigquery-public-data.stackoverflow'
 job_query_config = bigquery.job.QueryJobConfig(default_dataset = stackoverflow_dataset_id)
 
 
-# query to perform
-simple_query = """SELECT
-                      CONCAT(
-                          'https://stackoverflow.com/questions/',
-                          CAST(id as STRING)) as url,
-                      view_count
-                  FROM `posts_questions`
-                  WHERE tags like '%google-bigquery%'
-                  ORDER BY view_count DESC
-                  LIMIT 10"""
+# read query to perform from the file 
+query_file_name = "stack_overflow_query.sql"
+query_file = open(query_file_name)
+stackoverflow_query = query_file.read()
+query_file.close()
+
 
 # perform query with job_query_config as configurations. This allows to 
 # reference only tables within the bigquery-public -data.stackoverflow dataset
-query_job = client.query(simple_query, job_config = job_query_config)
+query_job = client.query(stackoverflow_query, job_config = job_query_config)
 
 # # # For examples on more sophisticated queries follows the examples in
 # # # https://console.cloud.google.com/marketplace/product/stack-exchange/stack-overflow?filter=solution-type:dataset&q=public%20data&id=46a148ff-896d-444c-b08d-360169911f59
