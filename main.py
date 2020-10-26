@@ -20,6 +20,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # import functions from auxiliary files
 from errors_aux import custom_error
+from import_sql_query_files import import_sql_query
 
 # set environment variable to point to the google credentials. Raise error
 # without the .json credential file
@@ -33,6 +34,11 @@ else:
                             "one if you don't."
     raise custom_error(error_no_credentials)
 
+
+# read query to perform from the file 
+query_file_path = "stack_overflow_query.sql"
+stackoverflow_query = import_sql_query(query_file_path)
+
 # build authentication object 
 # guidelines at https://cloud.google.com/bigquery/docs/bigquery-storage-python-pandas
 credentials, project_id = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
@@ -43,14 +49,6 @@ client = bigquery.Client(credentials = credentials, project = project_id)
 # point to stackoverflow dataset as default dataset in the job_query_configurations 
 stackoverflow_dataset_id = 'bigquery-public-data.stackoverflow'
 job_query_config = bigquery.job.QueryJobConfig(default_dataset = stackoverflow_dataset_id)
-
-
-# read query to perform from the file 
-query_file_name = "stack_overflow_query.sql"
-query_file = open(query_file_name)
-stackoverflow_query = query_file.read()
-query_file.close()
-
 
 # perform query with job_query_config as configurations. This allows to 
 # reference only tables within the bigquery-public -data.stackoverflow dataset
