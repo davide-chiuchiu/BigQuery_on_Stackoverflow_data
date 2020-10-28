@@ -10,7 +10,7 @@ stored in an .sql file as a string that can be passed to bigquery.client
 """
 
 
-def import_sql_query(query_file_path):
+def import_sql_query_from_file(query_file_path):
     """
     Parameters
     ----------
