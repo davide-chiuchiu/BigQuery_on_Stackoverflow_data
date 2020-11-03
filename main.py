@@ -45,13 +45,13 @@ Import info about the dataset structure and save it as .csv
 '''
 database_structure = send_query_to_database(bigquery_client, job_query_config, "schema_stack_overflow_query.sql", "sql_queries")
 database_structure = database_structure.pivot_table(index = 'column_name', columns = 'table_name', aggfunc='size')
-database_structure.to_csv('database_relation_structure.csv')
+database_structure.to_csv('database_entity_relation_diagram.csv')
 
 
 '''
 Perform query to get [fill in info]
 '''
-#dataframe_query = send_query_to_database(bigquery_client, job_query_config, "stack_overflow_query.sql", "sql_queries")
+dataframe_query = send_query_to_database(bigquery_client, job_query_config, "stack_overflow_query.sql", "sql_queries")
 
 
 
