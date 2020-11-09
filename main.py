@@ -49,9 +49,10 @@ database_structure.to_csv('database_entity_relation_diagram.csv')
 
 
 '''
-Perform query to get [fill in info]
+Perform query to get the cumulative number of questions asked for each tag
+over time
 '''
-dataframe_query = send_query_to_database(bigquery_client, job_query_config, "stack_overflow_query.sql", "sql_queries")
+dataframe_query = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
 
 
 
