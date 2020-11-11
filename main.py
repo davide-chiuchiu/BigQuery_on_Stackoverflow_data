@@ -13,6 +13,7 @@ database with SQL, and then make some exploratory analysis
 # import packages
 import os
 from google.cloud import bigquery
+import seaborn
 
 # set current work directory to the one with this script.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -49,10 +50,24 @@ database_structure.to_csv('database_entity_relation_diagram.csv')
 
 
 '''
+Perform query to get the trend of tags in questions with answers
+'''
+dataframe_cumulative_number_of_tags = send_query_to_database(bigquery_client, job_query_config, "tag_trends.sql", "sql_queries")
+# plot how twchnical questions have changed since 2008
+order_of_lines = dataframe_cumulative_number_of_tags[['unique_tag', 'cumulative_questions']]\
+                 .groupby('unique_tag').max()\
+                 .sort_values(by = 'cumulative_questions', ascending = False).index
+seaborn.lineplot(x = 'creation_quarter',  y = 'cumulative_questions',
+                 hue = 'unique_tag', data = dataframe_cumulative_number_of_tags, 
+                 palette = 'colorblind', size = 'unique_tag',   size_order = order_of_lines)
+
+
+
+'''
 Perform query to get the cumulative number of questions asked for each tag
 over time
 '''
-dataframe_query = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
+#dataframe_query = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
 
 
 
