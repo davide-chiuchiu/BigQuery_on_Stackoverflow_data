@@ -64,10 +64,10 @@ seaborn.lineplot(x = 'creation_quarter',  y = 'cumulative_questions',
 
 
 '''
-Perform query to get the cumulative number of questions asked for each tag
-over time
+Perform query to get the histogram of waiting time for first answer for the
+10 most common tags
 '''
-#dataframe_query = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
+distribution_of_first_answers = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
 
 
 
