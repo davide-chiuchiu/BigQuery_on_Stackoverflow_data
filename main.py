@@ -14,6 +14,7 @@ database with SQL, and then make some exploratory analysis
 import os
 from google.cloud import bigquery
 import seaborn
+import matplotlib
 
 # set current work directory to the one with this script.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -53,23 +54,32 @@ database_structure.to_csv('database_entity_relation_diagram.csv')
 Perform query to get the trend of tags in questions with answers
 '''
 dataframe_cumulative_number_of_tags = send_query_to_database(bigquery_client, job_query_config, "tag_trends.sql", "sql_queries")
-# plot how twchnical questions have changed since 2008
+# plot how technical questions have changed since 2008
+figure, axis = matplotlib.pyplot.subplots(1, 2, gridspec_kw = {'width_ratios': [3, 2]}, figsize = (11, 10))
 order_of_lines = dataframe_cumulative_number_of_tags[['unique_tag', 'cumulative_questions']]\
                  .groupby('unique_tag').max()\
                  .sort_values(by = 'cumulative_questions', ascending = False).index
 seaborn.lineplot(x = 'creation_quarter',  y = 'cumulative_questions',
                  hue = 'unique_tag', data = dataframe_cumulative_number_of_tags, 
-                 palette = 'colorblind', size = 'unique_tag',   size_order = order_of_lines)
-
-
+                 palette = 'colorblind', size = 'unique_tag',   size_order = order_of_lines, 
+                 ax = axis[0])
+axis[0].set(xlabel = "Time [in unit of years]", ylabel = "Total questions posted")
+axis[0].legend([], [], frameon = False)
 
 '''
 Perform query to get the histogram of waiting time for first answer for the
 10 most common tags
 '''
-distribution_of_first_answers = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_timequery.sql", "sql_queries")
-
-
+distribution_of_first_answers = send_query_to_database(bigquery_client, job_query_config, "distribution_of_first_answer_time_query.sql", "sql_queries")
+# plot the frequency to get the best answer to a stackexchange question within
+# hours, days, weeks or months.
+seaborn.barplot(x = 'frequency', y = 'bucketized_waitining_time', 
+                data = distribution_of_first_answers, hue = 'unique_tag', 
+                ax = axis[1],
+                palette = 'colorblind')
+axis[1].set(xlabel = 'Time to get the best answer of a question', ylabel = 'Frequency')
+axis[1].legend(title = 'Topic', loc='center right', bbox_to_anchor=(1.7, 0.5))
+figure.tight_layout(pad = 3.5)
 
 # close client
 bigquery_client.close()
