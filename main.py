@@ -31,7 +31,7 @@ initialize bigquery client and create dataset reference as default option for qu
 '''
 # set environment variable to point to the google credentials. Raise error
 # without the .json credential file
-google_credentials_path = os.path.join(os.getcwd(), 'Google_credentials', 'bigquery-stackoverflow-DC-fdb49371cf87.json')
+google_credentials_path = os.path.join(os.getcwd(), 'Google_credentials', 'fun-with-gcp-by-dc-9a87ccdb7b15.json')
 point_google_authentication_as_global_variable(google_credentials_path)
 
 # initialize bigquery client 

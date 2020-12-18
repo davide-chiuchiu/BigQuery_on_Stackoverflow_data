@@ -4,3 +4,5 @@ bigquery-stackoverflow-DC-fdb49371cf87.json
 __pycache__/
 
 .DS_Store
+
+Google_credentials/fun-with-gcp-by-dc-9a87ccdb7b15.json
